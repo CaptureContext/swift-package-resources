@@ -1,6 +1,7 @@
 import Foundation
 
-public struct FontResource: Equatable {
+public struct _FontResource: Equatable {
+  @inlinable
   public init(name: String) {
     self.name = name
   }

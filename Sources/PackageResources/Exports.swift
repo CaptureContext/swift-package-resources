@@ -7,21 +7,21 @@ import SwiftUI
 extension Color {
   @inlinable
   public static func resource(
-    _ resource: ColorResource
+    _ resource: _ColorResource
   ) -> Color {
     Color(resource.name, bundle: resource.bundle)
   }
 }
 #endif
 
-#if os(iOS)
+#if targetEnvironment(macCatalyst)
 import UIKit
 
 extension UIColor {
-  @available(iOS 11.0, *)
+  @available(iOS 13.1, *)
   @inlinable
   public static func resource(
-    _ resource: ColorResource,
+    _ resource: _ColorResource,
     compatibleWith traitCollection: UITraitCollection? = nil
   ) -> UIColor? {
     UIColor(named: resource.name, in: resource.bundle, compatibleWith: traitCollection)
@@ -32,7 +32,31 @@ extension CGColor {
   @available(iOS 11.0, *)
   @inlinable
   public static func resource(
-    _ resource: ColorResource
+    _ resource: _ColorResource
+  ) -> CGColor? {
+    UIColor.resource(resource)?.cgColor
+  }
+}
+
+#elseif os(iOS)
+import UIKit
+
+extension UIColor {
+  @available(iOS 11.0, *)
+  @inlinable
+  public static func resource(
+    _ resource: _ColorResource,
+    compatibleWith traitCollection: UITraitCollection? = nil
+  ) -> UIColor? {
+    UIColor(named: resource.name, in: resource.bundle, compatibleWith: traitCollection)
+  }
+}
+
+extension CGColor {
+  @available(iOS 11.0, *)
+  @inlinable
+  public static func resource(
+    _ resource: _ColorResource
   ) -> CGColor? {
     UIColor.resource(resource)?.cgColor
   }
@@ -44,7 +68,7 @@ import AppKit
 extension NSColor {
   @inlinable
   public static func resource(
-    _ resource: ColorResource
+    _ resource: _ColorResource
   ) -> NSColor? {
     NSColor(named: resource.name, bundle: resource.bundle)
   }
@@ -53,7 +77,7 @@ extension NSColor {
 extension CGColor {
   @inlinable
   public static func resource(
-    _ resource: ColorResource
+    _ resource: _ColorResource
   ) -> CGColor? {
     NSColor.resource(resource)?.cgColor
   }
@@ -67,7 +91,7 @@ import SwiftUI
 extension Font {
   @inlinable
   public static func resource(
-    _ resource: FontResource,
+    _ resource: _FontResource,
     size: CGFloat
   ) -> Font {
     .custom(
@@ -81,7 +105,7 @@ extension Font {
 extension Font {
   @inlinable
   public static func resource(
-    _ resource: FontResource,
+    _ resource: _FontResource,
     size: CGFloat,
     relativeTo textStyle: Font.TextStyle
   ) -> Font {
@@ -94,7 +118,7 @@ extension Font {
 
   @inlinable
   public static func resource(
-    _ resource: FontResource,
+    _ resource: _FontResource,
     fixedSize: CGFloat
   ) -> Font {
     .custom(
@@ -111,7 +135,7 @@ import UIKit
 extension CTFont {
   @inlinable
   public static func resource(
-    _ resource: FontResource,
+    _ resource: _FontResource,
     ofSize size: CGFloat
   ) -> CTFont? {
     UIFont.resource(
@@ -124,7 +148,7 @@ extension CTFont {
 extension UIFont {
   @inlinable
   public static func resource(
-    _ resource: FontResource,
+    _ resource: _FontResource,
     ofSize size: CGFloat
   ) -> UIFont? {
     UIFont(name: resource.name, size: size)
@@ -133,7 +157,7 @@ extension UIFont {
   @discardableResult
   @inlinable
   public static func registerIfNeeded(
-    _ resource: FontResource,
+    _ resource: _FontResource,
     from bundle: Bundle
   ) -> (isRegistered: Bool, didTryToRegister: Bool) {
     registerIfNeeded([resource], from: bundle).first
@@ -143,7 +167,7 @@ extension UIFont {
   @discardableResult
   @inlinable
   public static func register(
-    _ resource: FontResource,
+    _ resource: _FontResource,
     from bundle: Bundle
   ) -> Bool {
     let urls = ["otf", "ttf"].compactMap { ext in
@@ -163,9 +187,9 @@ extension UIFont {
   @discardableResult
   @inlinable
   public static func registerIfNeeded(
-    _ resources: [FontResource],
+    _ resources: [_FontResource],
     from bundle: Bundle
-  ) -> [(font: FontResource, isRegistered: Bool, didTryToRegister: Bool)] {
+  ) -> [(font: _FontResource, isRegistered: Bool, didTryToRegister: Bool)] {
     let installedFonts: Set<String> = Set(installed())
     return resources.map {
       let isNotRegistered = !installedFonts.contains($0.name)
@@ -175,9 +199,9 @@ extension UIFont {
   @discardableResult
   @inlinable
   public static func register(
-    _ resources: [FontResource],
+    _ resources: [_FontResource],
     from bundle: Bundle
-  ) -> [(font: FontResource, isRegistered: Bool)] {
+  ) -> [(font: _FontResource, isRegistered: Bool)] {
     resources.map { ($0, register($0, from: bundle)) }
   }
 
@@ -199,7 +223,7 @@ import AppKit
 extension CTFont {
   @inlinable
   public static func resource(
-    _ resource: FontResource,
+    _ resource: _FontResource,
     ofSize size: CGFloat
   ) -> CTFont? {
     NSFont.resource(
@@ -212,7 +236,7 @@ extension CTFont {
 extension NSFont {
   @inlinable
   public static func resource(
-    _ resource: FontResource,
+    _ resource: _FontResource,
     ofSize size: CGFloat
   ) -> NSFont? {
     NSFont(name: resource.name, size: size)
@@ -221,7 +245,7 @@ extension NSFont {
   @discardableResult
   @inlinable
   public static func registerIfNeeded(
-    _ resource: FontResource,
+    _ resource: _FontResource,
     from bundle: Bundle
   ) -> (isRegistered: Bool, didTryToRegister: Bool) {
     registerIfNeeded([resource], from: bundle).first
@@ -231,7 +255,7 @@ extension NSFont {
   @discardableResult
   @inlinable
   public static func register(
-    _ resource: FontResource,
+    _ resource: _FontResource,
     from bundle: Bundle
   ) -> Bool {
     let urls = ["otf", "ttf"].compactMap { ext in
@@ -251,9 +275,9 @@ extension NSFont {
   @discardableResult
   @inlinable
   public static func registerIfNeeded(
-    _ resources: [FontResource],
+    _ resources: [_FontResource],
     from bundle: Bundle
-  ) -> [(font: FontResource, isRegistered: Bool, didTryToRegister: Bool)] {
+  ) -> [(font: _FontResource, isRegistered: Bool, didTryToRegister: Bool)] {
     let installedFonts = installedFontset()
     return resources.map {
       let isNotRegistered = !installedFonts.contains($0.name)
@@ -263,9 +287,9 @@ extension NSFont {
   @discardableResult
   @inlinable
   public static func register(
-    _ resources: [FontResource],
+    _ resources: [_FontResource],
     from bundle: Bundle
-  ) -> [(font: FontResource, isRegistered: Bool)] {
+  ) -> [(font: _FontResource, isRegistered: Bool)] {
     resources.map { ($0, register($0, from: bundle)) }
   }
 
@@ -302,14 +326,14 @@ import SwiftUI
 extension Image {
   @inlinable
   public static func resource(
-    _ resource: ImageResource
+    _ resource: _ImageResource
   ) -> Image {
     Image(resource.name, bundle: resource.bundle)
   }
 
   @inlinable
   public static func resource(
-    _ resource: ImageResource,
+    _ resource: _ImageResource,
     label: Text
   ) -> Image {
     Image(resource.name, bundle: resource.bundle)
@@ -317,21 +341,21 @@ extension Image {
 
   @inlinable
   public static func resource(
-    decorative resource: ImageResource
+    decorative resource: _ImageResource
   ) -> Image {
     Image(decorative: resource.name, bundle: resource.bundle)
   }
 }
 #endif
 
-#if os(iOS)
+#if targetEnvironment(macCatalyst)
 import UIKit
 
 extension UIImage {
-  @available(iOS 13.0, *)
+  @available(iOS 13.1, *)
   @inlinable
   public static func resource(
-    _ resource: ImageResource,
+    _ resource: _ImageResource,
     configuration: Configuration?
   ) -> UIImage? {
     UIImage(named: resource.name, in: resource.bundle, with: configuration)
@@ -339,7 +363,7 @@ extension UIImage {
 
   @inlinable
   public static func resource(
-    _ resource: ImageResource,
+    _ resource: _ImageResource,
     compatibleWith traitCollection: UITraitCollection? = nil
   ) -> UIImage? {
     return UIImage(
@@ -353,7 +377,42 @@ extension UIImage {
 extension CGImage {
   @inlinable
   public static func resource(
-    _ resource: ImageResource
+    _ resource: _ImageResource
+  ) -> CGImage? {
+    UIImage.resource(resource)?.cgImage
+  }
+}
+
+#elseif os(iOS)
+import UIKit
+
+extension UIImage {
+  @available(iOS 13.0, *)
+  @inlinable
+  public static func resource(
+    _ resource: _ImageResource,
+    configuration: Configuration?
+  ) -> UIImage? {
+    UIImage(named: resource.name, in: resource.bundle, with: configuration)
+  }
+
+  @inlinable
+  public static func resource(
+    _ resource: _ImageResource,
+    compatibleWith traitCollection: UITraitCollection? = nil
+  ) -> UIImage? {
+    return UIImage(
+      named: resource.name,
+      in: resource.bundle,
+      compatibleWith: traitCollection
+    )
+  }
+}
+
+extension CGImage {
+  @inlinable
+  public static func resource(
+    _ resource: _ImageResource
   ) -> CGImage? {
     UIImage.resource(resource)?.cgImage
   }
@@ -365,7 +424,7 @@ import AppKit
 extension NSImage {
   @inlinable
   public static func resource(
-    _ resource: ImageResource
+    _ resource: _ImageResource
   ) -> NSImage? {
     resource.bundle?.image(forResource: resource.name)
   }
@@ -374,7 +433,7 @@ extension NSImage {
 extension CGImage {
   @inlinable
   public static func resource(
-    _ resource: ImageResource
+    _ resource: _ImageResource
   ) -> CGImage? {
     NSImage.resource(resource).flatMap { image in
       image.cgImage(forProposedRect: nil, context: .current, hints: nil)
@@ -383,12 +442,14 @@ extension CGImage {
 }
 #endif
 
-#if os(iOS)
+#if targetEnvironment(macCatalyst)
+import UIKit
+
 extension UIImage {
-  @available(iOS 13.0, *)
+  @available(iOS 13.1, *)
   @inlinable
   public static func resource(
-    _ resource: ImageResource?,
+    _ resource: _ImageResource?,
     configuration: Configuration?
   ) -> UIImage? {
     return resource.flatMap { resource in
@@ -402,7 +463,7 @@ extension UIImage {
 
   @inlinable
   public static func resource(
-    _ resource: ImageResource?,
+    _ resource: _ImageResource?,
     compatibleWith traitCollection: UITraitCollection? = nil
   ) -> UIImage? {
     return resource.flatMap { resource in
@@ -418,7 +479,48 @@ extension UIImage {
 extension CGImage {
   @inlinable
   public static func resource(
-    _ resource: ImageResource?
+    _ resource: _ImageResource?
+  ) -> CGImage? {
+    return UIImage.resource(resource)?.cgImage
+  }
+}
+
+#elseif os(iOS)
+extension UIImage {
+  @available(iOS 13.0, *)
+  @inlinable
+  public static func resource(
+    _ resource: _ImageResource?,
+    configuration: Configuration?
+  ) -> UIImage? {
+    return resource.flatMap { resource in
+      UIImage(
+        named: resource.name,
+        in: resource.bundle,
+        with: configuration
+      )
+    }
+  }
+
+  @inlinable
+  public static func resource(
+    _ resource: _ImageResource?,
+    compatibleWith traitCollection: UITraitCollection? = nil
+  ) -> UIImage? {
+    return resource.flatMap { resource in
+      UIImage(
+        named: resource.name,
+        in: resource.bundle,
+        compatibleWith: traitCollection
+      )
+    }
+  }
+}
+
+extension CGImage {
+  @inlinable
+  public static func resource(
+    _ resource: _ImageResource?
   ) -> CGImage? {
     return UIImage.resource(resource)?.cgImage
   }
@@ -430,7 +532,7 @@ import AppKit
 extension NSImage {
   @inlinable
   public static func resource(
-    _ resource: ImageResource?
+    _ resource: _ImageResource?
   ) -> NSImage? {
     return resource.flatMap { resource in
       resource.bundle?.image(forResource: resource.name)
@@ -441,7 +543,7 @@ extension NSImage {
 extension CGImage {
   @inlinable
   public static func resource(
-    _ resource: ImageResource?
+    _ resource: _ImageResource?
   ) -> CGImage? {
     return NSImage.resource(resource).flatMap { image in
       image.cgImage(forProposedRect: nil, context: .current, hints: nil)
@@ -456,7 +558,7 @@ import SceneKit
 extension SCNScene {
   @inlinable
   public static func resource(
-    _ resource: SCNSceneResource,
+    _ resource: _SCNSceneResource,
     bundle: Bundle
   ) -> SCNScene? {
     let catalog = resource.catalog.map { "\($0)/" } ?? ""
@@ -475,7 +577,7 @@ import UIKit
 extension UIStoryboard {
   @inlinable
   public static func resource(
-    _ resource: StoryboardResource
+    _ resource: _StoryboardResource
   ) -> UIStoryboard {
     UIStoryboard(name: resource.name, bundle: resource.bundle)
   }
@@ -487,7 +589,7 @@ import AppKit
 extension NSStoryboard {
   @inlinable
   public static func resource(
-    _ resource: StoryboardResource
+    _ resource: _StoryboardResource
   ) -> NSStoryboard {
     NSStoryboard(name: resource.name, bundle: resource.bundle)
   }

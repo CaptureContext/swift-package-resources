@@ -1,7 +1,11 @@
 import Foundation
 
-public struct ImageResource: Equatable {
-  public init(name: String, bundle: Bundle? = nil) {
+public struct _ImageResource: Equatable {
+  @inlinable
+  public init(
+    name: String,
+    bundle: Bundle? = nil
+  ) {
     self.name = name
     self.bundle = bundle
   }

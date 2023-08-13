@@ -1,12 +1,17 @@
-public struct SCNSceneResource: Equatable {
+public struct _SCNSceneResource: Equatable {
   public var name: String
   public var catalog: String? = nil
 
+  @inlinable
   public init(name: String) {
     self.name = name
   }
 
-  public init(name: String, catalog: String?) {
+  @inlinable
+  public init(
+    name: String,
+    catalog: String?
+  ) {
     self.name = name
     self.catalog = catalog
   }
