@@ -1,10 +1,10 @@
 import Foundation
 
 public struct _FontResource: Equatable {
-  @inlinable
-  public init(name: String) {
-    self.name = name
-  }
+	public var name: String
 
-  public var name: String
+	@inlinable
+	public init(name: String) {
+		self.name = name
+	}
 }
