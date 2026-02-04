@@ -1,0 +1,36 @@
+version: 1
+builder:
+	configs:
+	- platform: ios
+		scheme: PackageResources
+	- platform: macos-xcodebuild
+		scheme: PackageResources
+	- platform: tvos
+		scheme: PackageResources
+	- platform: watchos
+		scheme: PackageResources
+	- platform: linux
+		scheme: PackageResources
+		swift_version: '5.9'
+	- platform: linux
+		scheme: PackageResources
+		swift_version: '6.0'
+
+	- platform: ios
+		scheme: PackageResourcesCore
+	- platform: macos-xcodebuild
+		scheme: PackageResourcesCore
+	- platform: tvos
+		scheme: PackageResourcesCore
+	- platform: watchos
+		scheme: PackageResourcesCore
+	- platform: linux
+		scheme: PackageResourcesCore
+		swift_version: '5.9'
+	- platform: linux
+		scheme: PackageResourcesCore
+		swift_version: '6.0'
+
+	- documentation_targets:
+		- PackageResources
+		- PackageResourcesCore
