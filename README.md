@@ -1,5 +1,7 @@
 # swift-package-resources
 
+[![CI](https://github.com/capturecontext/swift-package-resources/actions/workflows/ci.yml/badge.svg)](https://github.com/capturecontext/swift-package-resources/actions/workflows/ci.yml) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fcapturecontext%2Fswift-package-resources%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/capturecontext/swift-package-resources) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fcapturecontext%2Fswift-package-resources%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/capturecontext/swift-package-resources)
+
 Package with lightweight resources models for code generation.
 
 > [!TIP]
