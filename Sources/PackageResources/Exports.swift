@@ -556,18 +556,19 @@ extension CGImage {
 import SceneKit
 
 extension SCNScene {
-  @inlinable
-  public static func resource(
-    _ resource: _SCNSceneResource,
-    bundle: Bundle
-  ) -> SCNScene? {
-    let catalog = resource.catalog.map { "\($0)/" } ?? ""
-    let fileName = "\(resource.name).scn"
-    let pathComponent = catalog + fileName
-    return try? SCNScene(
-      url: bundle.bundleURL.appendingPathComponent("\(pathComponent)")
-    )
-  }
+	@inlinable
+	public static func resource(
+		_ resource: _SCNSceneResource
+	) -> SCNScene? {
+		let catalog = resource.catalog.map { "\($0)/" } ?? ""
+		let fileName = "\(resource.name).scn"
+		let pathComponent = catalog + fileName
+
+		return try? SCNScene(
+			url: (resource.bundle ?? .main)
+				.bundleURL.appendingPathComponent("\(pathComponent)")
+		)
+	}
 }
 #endif
 
