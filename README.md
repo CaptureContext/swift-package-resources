@@ -72,33 +72,42 @@ Product with resource model declarations.
 
 ## Installation
 
+> [!IMPORTANT]
+>
+> This package is meant to be used with a codegen. 
+> You can set up custom [swiftgen](https://github.com/SwiftGen/SwiftGen) template or use [our default codegen](https://github.com/capturecontext/package-resources-cli)
+
 ### Basic
 
-You can add PackageResources to an Xcode project by adding it as a package dependency.
+You can add `swift-package-resources` to an Xcode project by adding it as a package dependency.
 
 1. From the **File** menu, select **Swift Packages › Add Package Dependency…**
-2. Enter [`"https://github.com/capturecontext/swift-package-resources.git"`](https://github.com/capturecontext/swift-package-resources.git) into the package repository URL text field
-3. Choose products you need to link them to your project.
+2. Enter [`"https://github.com/capturecontext/swift-package-resources"`](https://github.com/capturecontext/swift-package-resources) into the package repository URL text field
+3. Choose products you need to link to your project.
 
 ### Recommended
 
-If you use SwiftPM for your project, you can add PackageResources to your package file.
+If you use SwiftPM for your project structure, add `swift-package-resources` dependency to your package file
 
 ```swift
 .package(
   url: "https://github.com/capturecontext/swift-package-resources.git", 
-  .upToNextMinor(from: "4.0.0")
+  .upToNextMinor("4.0.2")
 )
 ```
 
-Do not forget about target dependencies:
+Do not forget about target dependencies
 
 ```swift
 .product(
-  name: "PackageResources",
+  name: "<#Product#>", 
   package: "swift-package-resources"
 )
 ```
+
+> [!NOTE]
+>
+> _*The package is compatible with non-Apple platforms, however it uses conditional compilation, so* **APIs are only available on Apple platforms**_
 
 ## License
 
