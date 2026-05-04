@@ -5,4 +5,5 @@ public enum PackageResources {
 	public typealias Nib = _NibResource
 	public typealias Storyboard = _StoryboardResource
 	public typealias SCNScene = _SCNSceneResource
+	public typealias LocalizedString = _XCStringResource
 }

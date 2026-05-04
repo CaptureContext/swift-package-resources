@@ -1,9 +1,9 @@
 import Foundation
 
-public struct _NibResource: Equatable {
-	public var name: String
-	public var bundle: Bundle?
-	
+public struct _NibResource: Hashable, Sendable {
+	public let name: String
+	public let bundle: Bundle?
+
 	@inlinable
 	public init(
 		name: String,

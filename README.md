@@ -6,7 +6,7 @@ Package with lightweight resources models for code generation.
 
 > [!TIP]
 >
-> Default codegen for this package is [capturecontext/package-resources-cli](https://github.com/capturecontext/package-resources-cli) 
+> Default codegen for this package is [capturecontext/package-resources-cli](https://github.com/capturecontext/package-resources-cli)
 
 ## Table of contents
 
@@ -45,6 +45,23 @@ UIStoryboard.resource(_:PackageResources.Storyboard)
 NSStoryboard.resource(_:PackageResources.Storyboard)
 ```
 
+```swift
+String.localized(
+	_: PackageResources.LocalizedString,
+	locale: Locale? = nil
+)
+
+LocalizedStringResource.localized(
+	_: PackageResources.LocalizedString,
+	locale: Locale? = .current
+)
+
+LocalizedStringKey.localized(_:PackageResources.LocalizedString)
+
+Text.localized(_:PackageResources.LocalizedString)
+Text(localized:PackageResources.LocalizedString)
+```
+
 > [!NOTE]
 >
 > _Currently no custom Nib loading is available, but you can access `name` and `bundle` properties of `NibResource` to load your custom nib_
@@ -58,13 +75,14 @@ Product with resource model declarations.
 
 ##### Available resource declarations
 
-| Type                  | Alias                         |
-| --------------------- | ----------------------------- |
-| `_ColorResource`      | `PackageResources.Color`      |
-| `_FontResource`       | `PackageResources.Font`       |
-| `_ImageResource`      | `PackageResources.Image`      |
-| `_StoryboardResource` | `PackageResources.Storyboard` |
-| `_SCNSceneResource`   | `PackageResources.SCNScene`   |
+| Type                  | Alias                              |
+| --------------------- | ---------------------------------- |
+| `_ColorResource`      | `PackageResources.Color`           |
+| `_FontResource`       | `PackageResources.Font`            |
+| `_ImageResource`      | `PackageResources.Image`           |
+| `_StoryboardResource` | `PackageResources.Storyboard`      |
+| `_SCNSceneResource`   | `PackageResources.SCNScene`        |
+| `_XCStringResource`   | `PackageResources.LocalizedString` |
 
 > [!NOTE]
 >
@@ -92,7 +110,7 @@ If you use SwiftPM for your project structure, add `swift-package-resources` dep
 ```swift
 .package(
   url: "https://github.com/capturecontext/swift-package-resources.git", 
-  .upToNextMinor("4.0.2")
+  .upToNextMinor("5.0.0")
 )
 ```
 

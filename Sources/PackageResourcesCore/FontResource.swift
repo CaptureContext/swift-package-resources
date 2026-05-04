@@ -1,7 +1,7 @@
 import Foundation
 
-public struct _FontResource: Equatable {
-	public var name: String
+public struct _FontResource: Hashable, Sendable {
+	public let name: String
 
 	@inlinable
 	public init(name: String) {

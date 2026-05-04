@@ -1,8 +1,8 @@
 import Foundation
 
-public struct _ImageResource: Equatable {
-	public var name: String
-	public var bundle: Bundle?
+public struct _ImageResource: Hashable, Sendable {
+	public let name: String
+	public let bundle: Bundle?
 
 	@inlinable
 	public init(

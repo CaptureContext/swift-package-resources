@@ -1,9 +1,9 @@
 import Foundation
 
-public struct _SCNSceneResource: Equatable {
-	public var name: String
-	public var catalog: String? = nil
-	public var bundle: Bundle?
+public struct _SCNSceneResource: Hashable, Sendable {
+	public let name: String
+	public let catalog: String?
+	public let bundle: Bundle?
 
 	@inlinable
 	public init(
