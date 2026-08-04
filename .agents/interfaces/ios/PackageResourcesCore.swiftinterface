@@ -1,0 +1,123 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)
+// swift-module-flags: -target arm64-apple-ios13.0-simulator -enable-objc-interop -swift-version 6 -O -module-name PackageResourcesCore -package-name swift_package_resources
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.3.3
+import Foundation
+import Swift
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public struct _ColorResource : Swift.Hashable, Swift.Sendable {
+  public let name: Swift.String
+  public let bundle: Foundation.Bundle?
+  @inlinable public init(name: Swift.String, bundle: Foundation.Bundle? = nil) {
+		self.name = name
+		self.bundle = bundle
+	}
+  @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._ColorResource, _ b: PackageResourcesCore._ColorResource) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct _FontResource : Swift.Hashable, Swift.Sendable {
+  public let name: Swift.String
+  @inlinable public init(name: Swift.String) {
+		self.name = name
+	}
+  @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._FontResource, _ b: PackageResourcesCore._FontResource) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct _ImageResource : Swift.Hashable, Swift.Sendable {
+  public let name: Swift.String
+  public let bundle: Foundation.Bundle?
+  @inlinable public init(name: Swift.String, bundle: Foundation.Bundle? = nil) {
+		self.name = name
+		self.bundle = bundle
+	}
+  @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._ImageResource, _ b: PackageResourcesCore._ImageResource) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct _NibResource : Swift.Hashable, Swift.Sendable {
+  public let name: Swift.String
+  public let bundle: Foundation.Bundle?
+  @inlinable public init(name: Swift.String, bundle: Foundation.Bundle? = nil) {
+		self.name = name
+		self.bundle = bundle
+	}
+  @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._NibResource, _ b: PackageResourcesCore._NibResource) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct _SCNSceneResource : Swift.Hashable, Swift.Sendable {
+  public let name: Swift.String
+  public let catalog: Swift.String?
+  public let bundle: Foundation.Bundle?
+  @inlinable public init(name: Swift.String, catalog: Swift.String? = nil, bundle: Foundation.Bundle? = nil) {
+		self.name = name
+		self.catalog = catalog
+		self.bundle = bundle
+	}
+  @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._SCNSceneResource, _ b: PackageResourcesCore._SCNSceneResource) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct _StoryboardResource : Swift.Hashable, Swift.Sendable {
+  public let name: Swift.String
+  public let bundle: Foundation.Bundle?
+  @inlinable public init(name: Swift.String, bundle: Foundation.Bundle? = nil) {
+		self.name = name
+		self.bundle = bundle
+	}
+  @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._StoryboardResource, _ b: PackageResourcesCore._StoryboardResource) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum PackageResources {
+  public typealias Color = PackageResourcesCore._ColorResource
+  public typealias Image = PackageResourcesCore._ImageResource
+  public typealias Font = PackageResourcesCore._FontResource
+  public typealias Nib = PackageResourcesCore._NibResource
+  public typealias Storyboard = PackageResourcesCore._StoryboardResource
+  public typealias SCNScene = PackageResourcesCore._SCNSceneResource
+  public typealias LocalizedString = PackageResourcesCore._XCStringResource
+}
+public struct _XCStringResource : Swift.Hashable, Swift.Sendable {
+  public static func == (lhs: PackageResourcesCore._XCStringResource, rhs: PackageResourcesCore._XCStringResource) -> Swift.Bool
+  public enum Argument : Swift.Hashable, Swift.Sendable {
+    case int(Swift.Int)
+    case uint(Swift.UInt)
+    case float(Swift.Float)
+    case double(Swift.Double)
+    case object(Swift.String)
+    public var value: any Swift.CVarArg {
+      get
+    }
+    @_semantics("derived_enum_equals") @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_enum_equals(_ a: PackageResourcesCore._XCStringResource.Argument, _ b: PackageResourcesCore._XCStringResource.Argument) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public let key: Swift.StaticString
+  public let arguments: [PackageResourcesCore._XCStringResource.Argument]
+  public let table: Swift.String?
+  public let bundle: Foundation.Bundle
+  public init(key: Swift.StaticString, arguments: [PackageResourcesCore._XCStringResource.Argument], table: Swift.String?, bundle: Foundation.Bundle)
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
