@@ -1,0 +1,191 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.4 (swiftlang-6.4.0.25.4 clang-2100.3.25.1)
+// swift-module-flags: -target arm64-apple-macos12.0 -enable-objc-interop -language-mode 6 -O -enable-experimental-feature DebugDescriptionMacro -module-name PackageResources -package-name swift_package_resources
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.4
+import AppKit
+import Foundation
+@_exported import PackageResourcesCore
+import SceneKit
+import Swift
+import SwiftUI
+import _Concurrency
+import _SceneKit_SwiftUI
+import _StringProcessing
+import _SwiftConcurrencyShims
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+extension SwiftUICore::Color {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_ColorResource) -> SwiftUICore::Color {
+		Color(resource.name, bundle: resource.bundle)
+	}
+}
+extension AppKit::NSColor {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_ColorResource) -> AppKit::NSColor? {
+		NSColor(named: resource.name, bundle: resource.bundle)
+	}
+}
+extension CoreGraphics::CGColor {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_ColorResource) -> CoreGraphics::CGColor? {
+		NSColor.resource(resource)?.cgColor
+	}
+}
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+extension SwiftUICore::Font {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_FontResource, size: CoreFoundation::CGFloat) -> SwiftUICore::Font {
+		.custom(
+			resource.name,
+			size: size
+		)
+	}
+}
+@available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
+extension SwiftUICore::Font {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_FontResource, size: CoreFoundation::CGFloat, relativeTo textStyle: SwiftUICore::Font.SwiftUICore::TextStyle) -> SwiftUICore::Font {
+		.custom(
+			resource.name,
+			size: size,
+			relativeTo: textStyle
+		)
+	}
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_FontResource, fixedSize: CoreFoundation::CGFloat) -> SwiftUICore::Font {
+		.custom(
+			resource.name,
+			fixedSize: fixedSize
+		)
+	}
+}
+extension CoreText::CTFont {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_FontResource, ofSize size: CoreFoundation::CGFloat) -> CoreText::CTFont? {
+		NSFont.resource(
+			resource,
+			ofSize: size
+		).map { $0 }
+	}
+}
+extension AppKit::NSFont {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_FontResource, ofSize size: CoreFoundation::CGFloat) -> AppKit::NSFont? {
+		NSFont(name: resource.name, size: size)
+	}
+  @discardableResult
+  @inlinable public static func registerIfNeeded(_ resource: PackageResourcesCore::_FontResource, from bundle: Foundation::Bundle) -> (isRegistered: Swift::Bool, didTryToRegister: Swift::Bool) {
+		registerIfNeeded([resource], from: bundle).first
+			.map { ($0.isRegistered, $0.didTryToRegister) }!
+	}
+  @discardableResult
+  @inlinable public static func register(_ resource: PackageResourcesCore::_FontResource, from bundle: Foundation::Bundle) -> Swift::Bool {
+		let urls = ["otf", "ttf"].compactMap { ext in
+			bundle.url(forResource: resource.name, withExtension: ext)
+		}
+		guard
+			let fontURL = urls.first,
+			let fontData = try? Data(contentsOf: fontURL),
+			let fontDataProvider = CGDataProvider(data: fontData as CFData),
+			let font = CGFont(fontDataProvider)
+		else { return false }
+		var error: Unmanaged<CFError>?
+		CTFontManagerRegisterGraphicsFont(font, &error)
+		return error == nil
+	}
+  @discardableResult
+  @inlinable public static func registerIfNeeded(_ resources: [PackageResourcesCore::_FontResource], from bundle: Foundation::Bundle) -> [(font: PackageResourcesCore::_FontResource, isRegistered: Swift::Bool, didTryToRegister: Swift::Bool)] {
+		let installedFonts = installedFontset()
+		return resources.map {
+			let isNotRegistered = !installedFonts.contains($0.name)
+			return ($0, isNotRegistered  ? register($0, from: bundle) : true, isNotRegistered) }
+	}
+  @discardableResult
+  @inlinable public static func register(_ resources: [PackageResourcesCore::_FontResource], from bundle: Foundation::Bundle) -> [(font: PackageResourcesCore::_FontResource, isRegistered: Swift::Bool)] {
+		resources.map { ($0, register($0, from: bundle)) }
+	}
+  @inlinable public static func installedUnsorted() -> [(family: Swift::String, fonts: [Swift::String])] {
+		NSFontManager.shared.availableFontFamilies.map { family in
+			NSFontManager.shared.availableMembers(ofFontFamily: family).map { memebers in
+				(family, memebers.compactMap { $0.first as? String })
+			} ?? (family, [String]())
+		}
+	}
+  @inlinable public static func installedFontset() -> Swift::Set<Swift::String> {
+		Set(
+			(CTFontManagerCopyAvailableFontFamilyNames() as Array).flatMap { family -> [String] in
+				if let family = family as? String {
+					return NSFontManager.shared.availableMembers(ofFontFamily: family)
+						.map { $0.compactMap { $0.first as? String } }
+					?? [String]()
+				} else {
+					return [String]()
+				}
+			}
+		)
+	}
+}
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+extension SwiftUICore::Image {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_ImageResource) -> SwiftUICore::Image {
+		Image(resource.name, bundle: resource.bundle)
+	}
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_ImageResource, label: SwiftUICore::Text) -> SwiftUICore::Image {
+		Image(resource.name, bundle: resource.bundle)
+	}
+  @inlinable public static func resource(decorative resource: PackageResourcesCore::_ImageResource) -> SwiftUICore::Image {
+		Image(decorative: resource.name, bundle: resource.bundle)
+	}
+}
+extension AppKit::NSImage {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_ImageResource) -> AppKit::NSImage? {
+		resource.bundle?.image(forResource: resource.name)
+	}
+}
+extension CoreGraphics::CGImage {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_ImageResource) -> CoreGraphics::CGImage? {
+		NSImage.resource(resource).flatMap { image in
+			image.cgImage(forProposedRect: nil, context: .current, hints: nil)
+		}
+	}
+}
+extension AppKit::NSImage {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_ImageResource?) -> AppKit::NSImage? {
+		return resource.flatMap { resource in
+			resource.bundle?.image(forResource: resource.name)
+		}
+	}
+}
+extension CoreGraphics::CGImage {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_ImageResource?) -> CoreGraphics::CGImage? {
+		return NSImage.resource(resource).flatMap { image in
+			image.cgImage(forProposedRect: nil, context: .current, hints: nil)
+		}
+	}
+}
+extension SceneKit::SCNScene {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_SCNSceneResource) -> SceneKit::SCNScene? {
+		let catalog = resource.catalog.map { "\($0)/" } ?? ""
+		let fileName = "\(resource.name).scn"
+		let pathComponent = catalog + fileName
+
+		return try? SCNScene(
+			url: (resource.bundle ?? .main)
+				.bundleURL.appendingPathComponent("\(pathComponent)")
+		)
+	}
+}
+extension AppKit::NSStoryboard {
+  @inlinable public static func resource(_ resource: PackageResourcesCore::_StoryboardResource) -> AppKit::NSStoryboard {
+		NSStoryboard(name: resource.name, bundle: resource.bundle)
+	}
+}
+extension Swift::String {
+  public static func localized(_ resource: PackageResourcesCore::_XCStringResource, locale: Foundation::Locale? = nil) -> Swift::String
+}
+@available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
+extension Foundation::LocalizedStringResource {
+  public static func localized(_ resource: PackageResourcesCore::_XCStringResource, locale: Foundation::Locale = .current) -> Foundation::LocalizedStringResource
+}
+@available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
+extension SwiftUICore::Text {
+  public init(localized resource: PackageResourcesCore::_XCStringResource)
+  public static func localized(_ resource: PackageResourcesCore::_XCStringResource) -> SwiftUICore::Text
+}
+@available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
+extension SwiftUICore::LocalizedStringKey {
+  @available(macOS 11, iOS 14, tvOS 14, watchOS 7, *)
+  public static func localized(_ resource: PackageResourcesCore::_XCStringResource) -> SwiftUICore::LocalizedStringKey
+}
