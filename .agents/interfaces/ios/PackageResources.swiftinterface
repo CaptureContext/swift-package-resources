@@ -1,13 +1,13 @@
 // swift-interface-format-version: 1.0
 // swift-compiler-version: Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)
-// swift-module-flags: -target arm64-apple-macosx10.15 -enable-objc-interop -swift-version 6 -O -module-name PackageResources -package-name swift_package_resources
+// swift-module-flags: -target arm64-apple-ios13.0-simulator -enable-objc-interop -swift-version 6 -O -module-name PackageResources -package-name swift_package_resources
 // swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.3.3
-import AppKit
 import Foundation
 @_exported import PackageResourcesCore
 import SceneKit
 import Swift
 import SwiftUI
+import UIKit
 import _Concurrency
 import _SceneKit_SwiftUI
 import _StringProcessing
@@ -18,14 +18,16 @@ extension SwiftUICore.Color {
 		Color(resource.name, bundle: resource.bundle)
 	}
 }
-extension AppKit.NSColor {
-  @inlinable public static func resource(_ resource: PackageResourcesCore._ColorResource) -> AppKit.NSColor? {
-		NSColor(named: resource.name, bundle: resource.bundle)
+extension UIKit.UIColor {
+  @available(iOS 11.0, *)
+  @inlinable public static func resource(_ resource: PackageResourcesCore._ColorResource, compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+		UIColor(named: resource.name, in: resource.bundle, compatibleWith: traitCollection)
 	}
 }
 extension CoreGraphics.CGColor {
+  @available(iOS 11.0, *)
   @inlinable public static func resource(_ resource: PackageResourcesCore._ColorResource) -> CoreGraphics.CGColor? {
-		NSColor.resource(resource)?.cgColor
+		UIColor.resource(resource)?.cgColor
 	}
 }
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
@@ -55,15 +57,15 @@ extension SwiftUICore.Font {
 }
 extension CoreText.CTFont {
   @inlinable public static func resource(_ resource: PackageResourcesCore._FontResource, ofSize size: CoreFoundation.CGFloat) -> CoreText.CTFont? {
-		NSFont.resource(
+		UIFont.resource(
 			resource,
 			ofSize: size
 		).map { $0 }
 	}
 }
-extension AppKit.NSFont {
-  @inlinable public static func resource(_ resource: PackageResourcesCore._FontResource, ofSize size: CoreFoundation.CGFloat) -> AppKit.NSFont? {
-		NSFont(name: resource.name, size: size)
+extension UIKit.UIFont {
+  @inlinable public static func resource(_ resource: PackageResourcesCore._FontResource, ofSize size: CoreFoundation.CGFloat) -> UIKit.UIFont? {
+		UIFont(name: resource.name, size: size)
 	}
   @discardableResult
   @inlinable public static func registerIfNeeded(_ resource: PackageResourcesCore._FontResource, from bundle: Foundation.Bundle) -> (isRegistered: Swift.Bool, didTryToRegister: Swift.Bool) {
@@ -87,7 +89,7 @@ extension AppKit.NSFont {
 	}
   @discardableResult
   @inlinable public static func registerIfNeeded(_ resources: [PackageResourcesCore._FontResource], from bundle: Foundation.Bundle) -> [(font: PackageResourcesCore._FontResource, isRegistered: Swift.Bool, didTryToRegister: Swift.Bool)] {
-		let installedFonts = installedFontset()
+		let installedFonts: Set<String> = Set(installed())
 		return resources.map {
 			let isNotRegistered = !installedFonts.contains($0.name)
 			return ($0, isNotRegistered  ? register($0, from: bundle) : true, isNotRegistered) }
@@ -96,25 +98,12 @@ extension AppKit.NSFont {
   @inlinable public static func register(_ resources: [PackageResourcesCore._FontResource], from bundle: Foundation.Bundle) -> [(font: PackageResourcesCore._FontResource, isRegistered: Swift.Bool)] {
 		resources.map { ($0, register($0, from: bundle)) }
 	}
-  @inlinable public static func installedUnsorted() -> [(family: Swift.String, fonts: [Swift.String])] {
-		NSFontManager.shared.availableFontFamilies.map { family in
-			NSFontManager.shared.availableMembers(ofFontFamily: family).map { memebers in
-				(family, memebers.compactMap { $0.first as? String })
-			} ?? (family, [String]())
-		}
+  @inlinable public static func installed() -> [(family: Swift.String, fonts: [Swift.String])] {
+		familyNames.sorted()
+			.map { (family: $0, fonts: fontNames(forFamilyName: $0).sorted()) }
 	}
-  @inlinable public static func installedFontset() -> Swift.Set<Swift.String> {
-		Set(
-			(CTFontManagerCopyAvailableFontFamilyNames() as Array).flatMap { family -> [String] in
-				if let family = family as? String {
-					return NSFontManager.shared.availableMembers(ofFontFamily: family)
-						.map { $0.compactMap { $0.first as? String } }
-					?? [String]()
-				} else {
-					return [String]()
-				}
-			}
-		)
+  @inlinable public static func installed() -> [Swift.String] {
+		familyNames.flatMap { fontNames(forFamilyName: $0) }
 	}
 }
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
@@ -129,30 +118,48 @@ extension SwiftUICore.Image {
 		Image(decorative: resource.name, bundle: resource.bundle)
 	}
 }
-extension AppKit.NSImage {
-  @inlinable public static func resource(_ resource: PackageResourcesCore._ImageResource) -> AppKit.NSImage? {
-		resource.bundle?.image(forResource: resource.name)
+extension UIKit.UIImage {
+  @available(iOS 13.0, *)
+  @inlinable public static func resource(_ resource: PackageResourcesCore._ImageResource, configuration: UIKit.UIImage.Configuration?) -> UIKit.UIImage? {
+		UIImage(named: resource.name, in: resource.bundle, with: configuration)
+	}
+  @inlinable public static func resource(_ resource: PackageResourcesCore._ImageResource, compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+		return UIImage(
+			named: resource.name,
+			in: resource.bundle,
+			compatibleWith: traitCollection
+		)
 	}
 }
 extension CoreGraphics.CGImage {
   @inlinable public static func resource(_ resource: PackageResourcesCore._ImageResource) -> CoreGraphics.CGImage? {
-		NSImage.resource(resource).flatMap { image in
-			image.cgImage(forProposedRect: nil, context: .current, hints: nil)
-		}
+		UIImage.resource(resource)?.cgImage
 	}
 }
-extension AppKit.NSImage {
-  @inlinable public static func resource(_ resource: PackageResourcesCore._ImageResource?) -> AppKit.NSImage? {
+extension UIKit.UIImage {
+  @available(iOS 13.0, *)
+  @inlinable public static func resource(_ resource: PackageResourcesCore._ImageResource?, configuration: UIKit.UIImage.Configuration?) -> UIKit.UIImage? {
 		return resource.flatMap { resource in
-			resource.bundle?.image(forResource: resource.name)
+			UIImage(
+				named: resource.name,
+				in: resource.bundle,
+				with: configuration
+			)
+		}
+	}
+  @inlinable public static func resource(_ resource: PackageResourcesCore._ImageResource?, compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+		return resource.flatMap { resource in
+			UIImage(
+				named: resource.name,
+				in: resource.bundle,
+				compatibleWith: traitCollection
+			)
 		}
 	}
 }
 extension CoreGraphics.CGImage {
   @inlinable public static func resource(_ resource: PackageResourcesCore._ImageResource?) -> CoreGraphics.CGImage? {
-		return NSImage.resource(resource).flatMap { image in
-			image.cgImage(forProposedRect: nil, context: .current, hints: nil)
-		}
+		return UIImage.resource(resource)?.cgImage
 	}
 }
 extension SceneKit.SCNScene {
@@ -167,9 +174,9 @@ extension SceneKit.SCNScene {
 		)
 	}
 }
-extension AppKit.NSStoryboard {
-  @inlinable public static func resource(_ resource: PackageResourcesCore._StoryboardResource) -> AppKit.NSStoryboard {
-		NSStoryboard(name: resource.name, bundle: resource.bundle)
+extension UIKit.UIStoryboard {
+  @inlinable @_Concurrency.MainActor @preconcurrency public static func resource(_ resource: PackageResourcesCore._StoryboardResource) -> UIKit.UIStoryboard {
+		UIStoryboard(name: resource.name, bundle: resource.bundle)
 	}
 }
 extension Swift.String {
